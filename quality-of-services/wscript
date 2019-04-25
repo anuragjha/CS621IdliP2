@@ -9,8 +9,8 @@
 def build(bld):
     module = bld.create_ns3_module('quality-of-services', ['core'])
     module.source = [
-        'model/quality-of-services.cc',
-        'helper/quality-of-services-helper.cc',
+        'model/diff-serv.cc',
+        'model/traffic-class.cc',
         ]
 
     module_test = bld.create_ns3_module_test_library('quality-of-services')
@@ -21,8 +21,8 @@ def build(bld):
     headers = bld(features='ns3header')
     headers.module = 'quality-of-services'
     headers.source = [
-        'model/quality-of-services.h',
-        'helper/quality-of-services-helper.h',
+        'model/diff-serv.h',
+        'model/traffic-class.h',
         ]
 
     if bld.env.ENABLE_EXAMPLES:
