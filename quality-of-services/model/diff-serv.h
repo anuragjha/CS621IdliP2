@@ -14,11 +14,12 @@ using namespace ns3;
 class Diffserv: public Queue {
 	public:
 		static TypeId GetTypeId(void);
-		Diffserv();
 		void SetMode(Diffserv::QueueMode mode);
 		Diffserv::QueueMode GetMode(void); // have to make it const
 		Ptr<Packet> Schedule(void);
 		uint32_t Classify(Ptr<Packet> p);
+		Diffserv();
+
 
 	private:
 		QueueMode m_mode;
@@ -27,7 +28,6 @@ class Diffserv: public Queue {
 		virtual Ptr<Packet> DoDequeue(void);
 		virtual Ptr<Packet> DoPeek(void);
 		virtual Ptr<Packet> DoRemove(void);
-
 };
 
 #endif //NS_3_ALLINONE_DIFF_SERV_H
