@@ -3,6 +3,8 @@
 #include "build/ns3/internet-module.h"
 #include "build/ns3/point-to-point-module.h"
 #include "build/ns3/applications-module.h"
+#include "build/ns3/traffic-control-module.h"
+#include <vector>
 
 using namespace ns3;
 
@@ -50,11 +52,25 @@ main(int argc, char const *argv[])
 //    pointToPoint.SetChannelAttribute ("Delay", StringValue ("2ms"));
 //    NetDeviceContainer ndc23 = pointToPoint.Install (nodes.Get (2), nodes.Get (3));
 
+    uint32_t number = 2048;
+    ProtocolNumber pn(number);
+    ProtocolNumber pn2(number);
+
+    Filter filter;
+    filter.filterElements.push_back(&pn);
+    filter.filterElements.push_back(&pn2);
+
+    filter.PrintFilterElements();
+
+    TrafficClass highQueue = TrafficClass(500,500,2,0,false);
+    TrafficClass lowQueue = TrafficClass(500,500,1,0,true);
 
     //use ipv4addresshelper for allocation of ip address
     Ipv4AddressHelper address;
     address.SetBase("10.1.1.0", "255.255.255.0");
 
+
+   // SourceIpAddress add = new SourceIpAddress();
 
     //use ipv4interfacecontainer to associate netdevice and ipaddress
     Ipv4InterfaceContainer ifc01 = address.Assign(ndc01);
@@ -84,7 +100,7 @@ main(int argc, char const *argv[])
    	uint32_t maxPacketCount = 5;
  	UdpClientHelper client (ifc12.GetAddress(1), port); //giving client address of the server
  	client.SetAttribute ("MaxPackets", UintegerValue (maxPacketCount));
-    	client.SetAttribute ("Interval", TimeValue (interPacketInterval));
+ 	client.SetAttribute ("Interval", TimeValue (interPacketInterval));
   	client.SetAttribute ("PacketSize", UintegerValue (MaxPacketSize));
   	ApplicationContainer clientApps = client.Install (nodes.Get (0));
   	clientApps.Start (Seconds (2.0));
@@ -93,7 +109,6 @@ main(int argc, char const *argv[])
     //start and then destroy simulator
 	Simulator::Run();
 	Simulator::Destroy ();
-
 
 	/**/
 	return 0;
