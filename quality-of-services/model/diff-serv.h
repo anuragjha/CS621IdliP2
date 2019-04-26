@@ -5,29 +5,38 @@
 #ifndef NS_3_ALLINONE_DIFF_SERV_H
 #define NS_3_ALLINONE_DIFF_SERV_H
 
-#include <queue>
+#include "ns3/log.h"
 #include "ns3/packet.h"
 #include "ns3/queue.h"
+#include "ns3/traffic-class.h"
+#include <vector>
 
 using namespace ns3;
 
-class Diffserv: public Queue {
-	public:
-		static TypeId GetTypeId(void);
-		void SetMode(Diffserv::QueueMode mode);
-		Diffserv::QueueMode GetMode(void); // have to make it const
-		Ptr<Packet> Schedule(void);
-		uint32_t Classify(Ptr<Packet> p);
-		Diffserv();
+class Diffserv : public ns3::Queue<ns3::Packet> {
+    public:
+    	enum QueueMode {
+    		QUEUE_MODE_PACKETS,
+			QUEUE_MODE_BYTES,
+    	};
+        static TypeId GetTypeId(void);
+        Diffserv();
+        virtual ~Diffserv();
 
+        void SetMode(Diffserv::QueueMode mode);
+        Diffserv::QueueMode GetMode(void);
 
-	private:
-		QueueMode m_mode;
-		std::vector<TrafficClass*> q_class;
-		virtual bool DoEnqueue(Ptr<Packet> packet);
-		virtual Ptr<Packet> DoDequeue(void);
-		virtual Ptr<Packet> DoPeek(void);
-		virtual Ptr<Packet> DoRemove(void);
-};
+        virtual Ptr<Packet> Schedule(void);
+        uint32_t Classify(Ptr<Packet> p);
 
+        std::vector<TrafficClass*> GetQ_Class(void);
+        TrafficClass GetTrafficClassAtIndex(int index);
+
+    private:
+        QueueMode m_mode;
+        std::vector<TrafficClass*> q_class;
+        bool DoEnqueue(Ptr<Packet> p);
+        virtual Ptr<Packet> DoDequeue(void);
+        virtual Ptr<const Packet> DoPeek(void) const;
+}
 #endif //NS_3_ALLINONE_DIFF_SERV_H

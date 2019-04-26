@@ -11,6 +11,7 @@ def build(bld):
     module.source = [
     	 'model/quality-of-services.cc',
     	 'helper/quality-of-services-helper.cc',
+    	 'model/filter-element.cc',
 #        'model/diff-serv.cc',
 #        'model/traffic-class.cc',
         ]
@@ -27,6 +28,8 @@ def build(bld):
         'helper/quality-of-services-helper.h',
         'model/diff-serv.h',
         'model/traffic-class.h',
+        'model/filter.h',
+        'model/filter-element.h',
         ]
 
     if bld.env.ENABLE_EXAMPLES:
