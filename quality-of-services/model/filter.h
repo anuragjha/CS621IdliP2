@@ -1,6 +1,7 @@
-//
-// Created by manalipatil on 4/22/19.
-//
+/* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
+/* Created by manalipatil on 4/22/19.
+ *
+ */
 
 #ifndef NS_3_ALLINONE_FILTER_H
 #define NS_3_ALLINONE_FILTER_H
@@ -19,7 +20,7 @@ namespace ns3 {
 			void PrintFilterElements();
 			bool Match(Ptr<ns3::Packet> packet);
 			std::vector<ns3::FilterElement*> GetFilterElements();
-			void AddFilterElement(Ptr<ns3::FilterElement>);
+			void AddFilterElement(ns3::FilterElement* filterElement);
 		private:
 			std::vector<ns3::FilterElement*> filterElements;
 	};

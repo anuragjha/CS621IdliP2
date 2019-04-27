@@ -12,13 +12,12 @@ def build(bld):
     	 'model/quality-of-services.cc',
     	 'helper/quality-of-services-helper.cc',
     	 'model/filter-element.cc',
-#        'model/diff-serv.cc',
-#        'model/traffic-class.cc',
+    	 'model/filter.cc',
         ]
 
     module_test = bld.create_ns3_module_test_library('quality-of-services')
     module_test.source = [
-#        'test/quality-of-services-test-suite.cc',
+        'test/quality-of-services-test-suite.cc',
         ]
 
     headers = bld(features='ns3header')
@@ -32,8 +31,8 @@ def build(bld):
         'model/filter-element.h',
         ]
 
-    if bld.env.ENABLE_EXAMPLES:
-        bld.recurse('examples')
+    #if bld.env.ENABLE_EXAMPLES:
+    #    bld.recurse('examples')
 
     # bld.ns3_python_bindings()
 
