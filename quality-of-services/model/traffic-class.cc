@@ -1,23 +1,21 @@
 //
 // Created by manalipatil on 4/23/19.
 //
-#include "traffic-class.h"
+
 #include "ns3/log.h"
 #include "ns3/pointer.h"
 #include "ns3/uinteger.h"
 #include "ns3/object.h"
 #include "ns3/enum.h"
-#include "ns3/queue.h"
+#include "traffic-class.h"
 #include <queue>
-#include <vector>
 
-namespace ns3{
-    NS_LOG_COMPONENT_DEFINE ("TrafficClass");
-    NS_OBJECT_ENSURE_REGISTERED (TrafficClass);
+namespace ns3 {
 
-    TypeId
-    TrafficClass::GetTypeId (void)
-    {
+    NS_LOG_COMPONENT_DEFINE("TrafficClass");
+    NS_OBJECT_ENSURE_REGISTERED(TrafficClass);
+
+    TypeId TrafficClass::GetTypeId() {
         static TypeId tid = TypeId ("ns3::TrafficClass")
                 .SetParent<Object> ()
                 .SetGroupName ("TrafficControl")
@@ -25,19 +23,12 @@ namespace ns3{
         return tid;
     }
 
-    TrafficClass::TrafficClass(uint32_t maxBytes,uint32_t maxPackets,uint32_t priority, double weight, bool isDefault)
-    {
-      //  NS_LOG_FUNCTION (this);
-      this->maxBytes = maxBytes;
-      this->maxPackets = maxPackets;
-      this->priority_level = priority;
-      this->weight = weight;
-      this->isDefault = isDefault;
-    }
-
-    TrafficClass::~TrafficClass()
-    {
-       // NS_LOG_FUNCTION (this);
+    TrafficClass::TrafficClass(uint32_t maxBytes,uint32_t maxPackets,uint32_t priority, double weight, bool isDefault){
+		this->maxBytes = maxBytes;
+		this->maxPackets = maxPackets;
+		this->priority_level = priority;
+		this->weight = weight;
+		this->isDefault = isDefault;
     }
 
     bool TrafficClass::IfEmpty() {
@@ -53,14 +44,14 @@ namespace ns3{
     }
 
     bool TrafficClass::Enqueue(Ptr <Packet> packet) {
-      if(m_queue.size() >= maxPackets){
-         // Drop(packet);
-          return false;
-      }
-      if(bytes + packet->GetSize() >= maxBytes){
-          //Drop(packet);
-          return false;
-      }
+    	if(m_queue.size() >= maxPackets){
+    		// Drop(packet);
+    		return false;
+    	}
+    	if(bytes + packet->GetSize() >= maxBytes){
+    		//Drop(packet);
+    		return false;
+    	}
         bytes += packet->GetSize();
         m_queue.push(packet);
         return true;

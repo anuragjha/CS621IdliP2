@@ -13,6 +13,7 @@ def build(bld):
     	 'helper/quality-of-services-helper.cc',
     	 'model/filter-element.cc',
     	 'model/filter.cc',
+    	 'model/traffic-class.cc',
         ]
 
     module_test = bld.create_ns3_module_test_library('quality-of-services')
