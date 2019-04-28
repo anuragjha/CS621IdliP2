@@ -12,6 +12,7 @@ def build(bld):
     	 'model/quality-of-services.cc',
     	 'helper/quality-of-services-helper.cc',
     	 'model/source-ip-address.cc',
+    	 'model/source-port-number.cc',
     	 'model/destination-ip-address.cc',
     	 'model/filter-element.cc',
     	 'model/filter.cc',
@@ -34,7 +35,9 @@ def build(bld):
         'model/filter.h',
         'model/filter-element.h',
         'model/source-ip-address.h',
+        'model/source-port-number.h',
         'model/destination-ip-address.h',
+        
         ]
 
     #if bld.env.ENABLE_EXAMPLES:
