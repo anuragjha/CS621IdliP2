@@ -15,6 +15,7 @@ def build(bld):
     	 'model/source-port-number.cc',
     	 'model/destination-ip-address.cc',
     	 'model/destination-port-number.cc',
+    	 'model/protocol-number.cc',
     	 'model/filter-element.cc',
     	 'model/filter.cc',
     	 'model/traffic-class.cc',
@@ -39,6 +40,7 @@ def build(bld):
         'model/source-port-number.h',
         'model/destination-ip-address.h',
         'model/destination-port-number.h',
+        'model/protocol-number.h',
         ]
 
     #if bld.env.ENABLE_EXAMPLES:

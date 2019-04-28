@@ -4,6 +4,7 @@
  */
 #include "ns3/log.h"
 #include "ns3/packet.h"
+#include "ns3/ipv4-address.h"
 #include "filter-element.h"
 #include "filter.h"
 #include <iostream>
@@ -21,7 +22,7 @@ namespace ns3 {
         return tid;
     }
 
-    Filter::Filter(){
+    Filter::Filter(Ipv4Address sourceIpAddress, uint16_t sourcePort, Ipv4Address destinationIpAddress, uint16_t destinationPort, uint8_t protocolNumber){
     }
 
     void Filter::PrintFilterElements() {
