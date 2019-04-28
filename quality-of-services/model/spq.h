@@ -20,20 +20,19 @@
 namespace ns3{
 
     class SPQ:public Diffserv{
-    public:
-        static TypeId GetTypeId (void);
-        SPQ();
-        ~SPQ();
+		public:
+			static TypeId GetTypeId (void);
+			SPQ();
+			~SPQ();
 
-        Ptr<Packet> Schedule(void);
+			Ptr<Packet> Schedule(void);
+			Ptr<Packet> ScheduleForPeek(void);
 
-        Ptr<Packet> ScheduleForPeek(void);
-
-    private:
-       // bool DoEnqueue(Ptr<Packet> packet);
-        Ptr<Packet> DoDequeue(void);
-        Ptr<const Packet> DoPeek(void);
-      //  Ptr<Packet> DoRemove(void);
+		private:
+			bool DoEnqueue(Ptr<Packet> packet);
+			Ptr<Packet> DoDequeue(void);
+			Ptr<const Packet> DoPeek(void);
+			Ptr<Packet> DoRemove(void);
     };
 }
 

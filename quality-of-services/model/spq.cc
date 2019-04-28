@@ -6,7 +6,6 @@
 #include "ns3/log-macros-enabled.h"
 #include "ns3/log-macros-disabled.h"
 #include "diff-serv.h"
-//#include "traffic-class.h"
 #include "ns3/packet.h"
 #include <cstring>
 #include <iostream>

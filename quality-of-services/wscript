@@ -11,6 +11,7 @@ def build(bld):
     module.source = [
     	 'model/quality-of-services.cc',
     	 'helper/quality-of-services-helper.cc',
+    	 'model/source-ip-address.cc',
     	 'model/filter-element.cc',
     	 'model/filter.cc',
     	 'model/traffic-class.cc',
@@ -31,6 +32,7 @@ def build(bld):
         'model/traffic-class.h',
         'model/filter.h',
         'model/filter-element.h',
+        'model/source-ip-address.h',
         ]
 
     #if bld.env.ENABLE_EXAMPLES:
