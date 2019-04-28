@@ -4,28 +4,28 @@
 #include "ns3/ppp-header.h"
 #include "ns3/udp-header.h"
 #include "ns3/ipv4-header.h" 
-#include "source-ip-address.h"
+#include "destination-ip-address.h"
 #include "stdio.h"
 #include <iostream>
 
 namespace ns3 {
 
-    NS_LOG_COMPONENT_DEFINE ("SourceIpAddress");
-    NS_OBJECT_ENSURE_REGISTERED (SourceIpAddress);
+    NS_LOG_COMPONENT_DEFINE ("DestinationIpAddress");
+    NS_OBJECT_ENSURE_REGISTERED (DestinationIpAddress);
 
-    TypeId SourceIpAddress::GetTypeId(void){
+    TypeId DestinationIpAddress::GetTypeId(void){
     	static TypeId tid = TypeId ("ns3::SourceIpAddress")
         .SetParent<Object> ()
         .SetGroupName ("TrafficControl");
     	return tid;
     }
 
-    SourceIpAddress::SourceIpAddress(Ipv4Address value){
+    DestinationIpAddress::DestinationIpAddress(Ipv4Address value){
     	// NS_LOG_FUNCTION (this);
     	this->value = value;
     }
 
-    bool SourceIpAddress::Match (Ptr<Packet> packet){
+    bool DestinationIpAddress::Match(Ptr<Packet> packet){
     	// NS_LOG_FUNCTION (this << packet);
     	Ptr<Packet> copy = packet->Copy ();
     	PppHeader ppph;
@@ -33,7 +33,7 @@ namespace ns3 {
 		copy->RemoveHeader(ppph);
 		copy->RemoveHeader(iph);
 
-		Ipv4Address Ipv4Address = iph.GetSource();
+		Ipv4Address Ipv4Address = iph.GetDestination();
 		if(Ipv4Address.IsEqual(this->value)){
 			std::cout<<" Matched Ipv4Address:" << Ipv4Address <<std::endl;
 			return true;
