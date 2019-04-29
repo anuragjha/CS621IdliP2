@@ -1,10 +1,10 @@
 
-#ifndef SOURCE_IP_ADDRESS_H
-#define SOURCE_IP_ADDRESS_H
+#ifndef PROTOCOL_NUMBER_H
+#define PROTOCOL_NUMBER_H
 
 #include "ns3/log.h"
-#include "filter-element.h"
 #include "ns3/ipv4-address.h"
+#include "filter-element.h"
 
 namespace ns3 {
 	class ProtocolNumber: public FilterElement {
@@ -17,4 +17,4 @@ namespace ns3 {
 	};
 } // namespace ns3
 
-#endif /* SOURCE_IP_ADDRESS */
+#endif /* PROTOCOL_NUMBER */
