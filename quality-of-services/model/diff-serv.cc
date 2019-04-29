@@ -25,73 +25,64 @@ namespace ns3 {
     }
 
     Diffserv::Diffserv():Queue() {
-       // NS_LOG_FUNCTION(this); //we
     }
 
     Diffserv::~Diffserv() {
-       // NS_LOG_FUNCTION(this);//we
     }
 
     void Diffserv::SetMode(Diffserv::QueueMode mode) {
-       // NS_LOG_FUNCTION(this); //we
         m_mode = mode;
     }
 
     Diffserv::QueueMode Diffserv::GetMode() {
-        //NS_LOG_FUNCTION(this);//we
         return m_mode;
     }
 
-    bool Diffserv::DoEnqueue(Ptr <Packet> p) {
-        bool resultOfEnqueue = false;
-       uint32_t i = Classify(p);
-       TrafficClass tc = GetTrafficClassAtIndex(int(i));
-       resultOfEnqueue = tc.Enqueue(p);
-       return resultOfEnqueue;
-    }
-
     std::vector<TrafficClass *> Diffserv::GetQ_Class() {
-        return this->q_class;
+		return this->q_class;
+	}
+
+    bool Diffserv::Enqueue(Ptr <Packet> p){
+    	return this->DoEnqueue(p);
     }
 
-    //todo
+    bool Diffserv::DoEnqueue(Ptr <Packet> p) {
+    	uint32_t i = Classify(p);
+		TrafficClass tc = this->GetTrafficClassAtIndex(int(i));
+		return tc.Enqueue(p);
+    }
+
+    Ptr<Packet> Diffserv::Dequeue(){
+		return this->DoDequeue();
+	}
+
     Ptr<Packet> Diffserv::DoDequeue() {
-
-        //do dequeue
-
-        Ptr<Packet> p = new Packet();
-        return p;
+		return Schedule();
     }
 
-    //todo
-    Ptr<const Packet> Diffserv::DoPeek() const {
 
-        //do peek;
-        Ptr<Packet> p = new Packet();
-        return p;
+    Ptr<const Packet> Diffserv::Peek(){
+    	return this->DoPeek();
     }
+
+    Ptr<Packet> Diffserv::Remove() {
+		return this->DoRemove();
+	}
 
     TrafficClass Diffserv::GetTrafficClassAtIndex(int index) {
         TrafficClass* tc;
         tc = q_class[index];
-       return *tc ;
+        return *tc ;
     }
 
-   //todo
     uint32_t Diffserv::Classify(Ptr <Packet> packet) {
-        //NS_LOG_FUNCTION(this<<packet);//we
         int i = 0;
         for(TrafficClass* trafficClass: q_class) {
             i = i+1;
-            if (trafficClass->Match(packet)) {
+            if(trafficClass->Match(packet)) {
                 return i;
             }
         }
         return 0;
-    }
-
-    Ptr<Packet> Diffserv::Schedule() {
-        Ptr<Packet> p = new Packet();
-        return p;
     }
 }

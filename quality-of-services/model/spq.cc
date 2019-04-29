@@ -61,11 +61,9 @@ namespace ns3{
                trafficClass = tc;
            }
         }
-        if(maxPriority < 9999) {
-           packet = trafficClass->Dequeue();
-            return packet;
-        }
-        return 0;
+
+		packet = trafficClass->Dequeue();
+		return packet;
     }
 
     Ptr<Packet> SPQ::ScheduleForPeek() {

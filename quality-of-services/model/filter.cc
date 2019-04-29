@@ -26,6 +26,8 @@ namespace ns3 {
         return tid;
     }
 
+    // Push this to main method. Change constructor
+    // Filter elements to filter at run time
     Filter::Filter(Ipv4Address sourceIpAddress, uint16_t sourcePort, Ipv4Address destinationIpAddress, uint16_t destinationPort, uint8_t protocolNumber){
     	FilterElement* sourceIpFilterElement = new SourceIpAddress(sourceIpAddress);
     	this->AddFilterElement(sourceIpFilterElement);
@@ -57,13 +59,14 @@ namespace ns3 {
     	filterElements.push_back(filterElement);
     }
 
+    // Return true iff match is true on all the filter elements
     bool Filter::Match(Ptr<ns3::Packet> packet){
         for(FilterElement* filterElement:filterElements){
-            if(filterElement->Match(packet)){
-                std::cout<<"Match Found"<<std::endl;
-                return true;
+            if(!filterElement->Match(packet)){
+                std::cout<<"Match not Found"<<std::endl;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 };

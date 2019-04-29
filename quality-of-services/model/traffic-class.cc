@@ -72,6 +72,7 @@ namespace ns3 {
         return p;
     }
 
+    // Return true if any of the filter match
     bool TrafficClass::Match(Ptr <Packet> packet) {
        // NS_LOG_FUNCTION(this<<packet);
         for(Filter* filter: filters){
@@ -82,5 +83,3 @@ namespace ns3 {
         return false;
     }
 }
-
-//classify in diffserv will call match
