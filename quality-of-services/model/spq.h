@@ -24,7 +24,6 @@ namespace ns3{
 			static TypeId GetTypeId (void);
 			SPQ();
 			~SPQ();
-
 			Ptr<Packet> Schedule(void);
 			Ptr<Packet> ScheduleForPeek(void);
 

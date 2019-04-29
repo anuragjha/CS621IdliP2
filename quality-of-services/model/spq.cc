@@ -3,20 +3,17 @@
 //
 
 #include "ns3/log.h"
-#include "ns3/log-macros-enabled.h"
-#include "ns3/log-macros-disabled.h"
 #include "diff-serv.h"
 #include "ns3/packet.h"
+#include "ns3/object.h"
+#include "ns3/uinteger.h"
 #include <cstring>
 #include <iostream>
 #include <vector>
-#include "ns3/object.h"
-#include "ns3/uinteger.h"
 #include "spq.h"
 
 namespace ns3{
     NS_LOG_COMPONENT_DEFINE("SPQ");
-
     NS_OBJECT_ENSURE_REGISTERED(SPQ);
 
     TypeId SPQ::GetTypeId(void) {
@@ -27,47 +24,31 @@ namespace ns3{
     }
 
     SPQ::SPQ():Diffserv(){
-        //NS_LOG_FUNCTION(this);//we
     }
 
     SPQ::~SPQ() {
-        //NS_LOG_FUNCTION(this);//we
     }
 
-   // bool SPQ::DoEnqueue(Ptr <Packet> packet) {
-       // NS_LOG_FUNCTION(this);//we
-   //    return true;
-    //}
-
-    //Ptr<Packet> SPQ::Schedule() {
-
-        //take from the appropriate queue and return
-
-
-
-    //    Ptr<Packet> p = new Packet();
-    //    return p;
-    //}
-
-
     Ptr<Packet> SPQ::Schedule() {
-        uint32_t maxPriority = 9999;
+        uint32_t maxPriority = -1;
         Ptr<Packet> packet;
         TrafficClass* trafficClass;
         for(TrafficClass* tc : GetQ_Class()){
            uint32_t priority = tc->GetPriorityLevel();
-           if(priority > maxPriority){
+           if(priority > maxPriority && !trafficClass->IfEmpty() ){
                maxPriority = priority;
                trafficClass = tc;
            }
         }
-
-		packet = trafficClass->Dequeue();
-		return packet;
+        if(maxPriority!=uint32_t(-1)){
+        	packet = trafficClass->Dequeue();
+			return packet;
+        }
+        return 0;
     }
 
     Ptr<Packet> SPQ::ScheduleForPeek() {
-        uint32_t maxPriority = 9999;
+        uint32_t maxPriority = -1;
         Ptr<Packet> packet;
         TrafficClass* trafficClass;
         for(TrafficClass* tc : GetQ_Class()){
@@ -77,7 +58,7 @@ namespace ns3{
                 trafficClass = tc;
             }
         }
-        if(maxPriority < 9999) {
+        if(maxPriority!=uint32_t(-1)) {
             packet = trafficClass->Peek();
             return packet;
         }
@@ -91,4 +72,9 @@ namespace ns3{
     Ptr<const Packet> SPQ::DoPeek() {
         return this->ScheduleForPeek();
     }
+
+    Ptr<Packet> SPQ::DoRemove() {
+    	return this->DoDequeue();
+	}
+
 }
