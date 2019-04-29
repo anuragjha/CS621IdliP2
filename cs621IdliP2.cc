@@ -44,11 +44,18 @@ main(int argc, char const *argv[])
     //creating pointtopoint helper - net device and channel
     //real world corresponds to ethernet card and network cables
     PointToPointHelper pointToPoint;
-	//pointToPoint.SetQueue ("ns3::SPQ");
-
     pointToPoint.SetDeviceAttribute("DataRate", StringValue ("5Mbps"));
     pointToPoint.SetChannelAttribute("Delay", StringValue ("2ms"));
     NetDeviceContainer ndc01 = pointToPoint.Install (nodes.Get (0), nodes.Get (1));
+	Ptr<PointToPointNetDevice> ppp1 = DynamicCast<PointToPointNetDevice>(ndc01.Get (0));
+	
+	// TODO: Create a strict priority queue or DRR from config parameters
+	Ptr<SPQ<Packet>> q = new SPQ<Packet>();
+	ppp1.SetQueue(q)
+
+	// TODO: Create two Traffic classes based on config entries
+	// TODO: For each traffic class create filter from config entries 
+	// TODO: For each traffic class add filter elements from config entries 
 
     pointToPoint.SetDeviceAttribute("DataRate", StringValue ("3Mbps"));
     pointToPoint.SetChannelAttribute("Delay", StringValue ("2ms"));
