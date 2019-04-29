@@ -4,6 +4,15 @@
 #include "build/ns3/point-to-point-module.h"
 #include "build/ns3/applications-module.h"
 #include "build/ns3/traffic-control-module.h"
+#include "build/ns3/spq.h"
+#include "build/ns3/traffic-class.h"
+#include "build/ns3/filter.h"
+#include "build/ns3/filter-element.h"
+#include "build/ns3/source-ip-address.h"
+#include "build/ns3/source-port-number.h"
+#include "build/ns3/destination-ip-address.h"
+#include "build/ns3/destination-port-number.h"
+#include "build/ns3/protocol-number.h"
 #include <vector>
 
 using namespace ns3;
@@ -22,10 +31,7 @@ main(int argc, char const *argv[])
     LogComponentEnable ("UdpClient", LOG_LEVEL_INFO);
     LogComponentEnable ("UdpServer", LOG_LEVEL_INFO);
 
-//Packet::EnablePrinting();
-//Packet::EnableChecking();
-
-
+	Packet::EnablePrinting();
 
     //creating 3 nodes
     NodeContainer nodes;
@@ -33,79 +39,78 @@ main(int argc, char const *argv[])
 
     //internetstackhelper to install protocols(tcp,udp,ip,etc)
     InternetStackHelper stack;
-    stack.Install (nodes);
+    stack.Install(nodes);
 
     //creating pointtopoint helper - net device and channel
     //real world corresponds to ethernet card and network cables
     PointToPointHelper pointToPoint;
+	//pointToPoint.SetQueue ("ns3::SPQ");
 
     pointToPoint.SetDeviceAttribute("DataRate", StringValue ("5Mbps"));
     pointToPoint.SetChannelAttribute("Delay", StringValue ("2ms"));
-    //create netDeviceContainer - makes use of pointtopoint helper
     NetDeviceContainer ndc01 = pointToPoint.Install (nodes.Get (0), nodes.Get (1));
 
-    pointToPoint.SetDeviceAttribute("DataRate", StringValue ("5Mbps"));
+    pointToPoint.SetDeviceAttribute("DataRate", StringValue ("3Mbps"));
     pointToPoint.SetChannelAttribute("Delay", StringValue ("2ms"));
     NetDeviceContainer ndc12 = pointToPoint.Install (nodes.Get (1), nodes.Get (2));
+	
+	Ipv4AddressHelper sourceIpAddress1;
+    sourceIpAddress1.SetBase("10.1.1.0", "255.255.255.0");
+	
+	Ipv4AddressHelper sourceIpAddress2;
+    sourceIpAddress2.SetBase("10.1.2.0", "255.255.255.0");
 
-//   pointToPoint.SetDeviceAttribute ("DataRate", StringValue ("5Mbps"));
-//    pointToPoint.SetChannelAttribute ("Delay", StringValue ("2ms"));
-//    NetDeviceContainer ndc23 = pointToPoint.Install (nodes.Get (2), nodes.Get (3));
-
-    uint32_t number = 2048;
-    ProtocolNumber pn(number);
-    ProtocolNumber pn2(number);
-
-    Filter filter;
-    filter.filterElements.push_back(&pn);
-    filter.filterElements.push_back(&pn2);
-
-    filter.PrintFilterElements();
-
-    TrafficClass highQueue = TrafficClass(500,500,2,0,false);
-    TrafficClass lowQueue = TrafficClass(500,500,1,0,true);
-
-    //use ipv4addresshelper for allocation of ip address
-    Ipv4AddressHelper address;
-    address.SetBase("10.1.1.0", "255.255.255.0");
-
-
-   // SourceIpAddress add = new SourceIpAddress();
-
-    //use ipv4interfacecontainer to associate netdevice and ipaddress
-    Ipv4InterfaceContainer ifc01 = address.Assign(ndc01);
-    Ipv4InterfaceContainer ifc12 = address.Assign(ndc12);
-//  Ipv4InterfaceContainer ifc23 = address.Assign(ndc23);
+	//use ipv4interfacecontainer to associate netdevice and ipaddress
+    Ipv4InterfaceContainer ifc01 = sourceIpAddress1.Assign(ndc01);
+    Ipv4InterfaceContainer ifc12 = sourceIpAddress2.Assign(ndc12);
 
     // Create router nodes, initialize routing database and set up the routing
-   // tables in the nodes.
-   Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
+   	// tables in the nodes.
+	Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
 
-    //// now at this point we have network built,
-    ////  at this point now we need applications to generate traffic
+	//// now at this point we have network built,
+    //// at this point now we need applications to generate traffic
 
-     NS_LOG_INFO ("Create Applications.");
+	NS_LOG_INFO ("Create Applications.");
 	//
 	// Create one udpServer applications on node one.
 	//
-  	uint16_t port = 9;
-  	UdpServerHelper server (port);
-  	ApplicationContainer serverApps = server.Install (nodes.Get (2));
+	
+	uint16_t serverPort1 = 8000;
+  	UdpServerHelper server1(serverPort1);
+  	ApplicationContainer serverApps1 = server1.Install(nodes.Get (2));
+	serverApps1.Start (Seconds (1.0));
+  	serverApps1.Stop (Seconds (10.0));
+	
+	uint16_t serverPort2 = 8001;
+  	UdpServerHelper server2(serverPort2);
+  	ApplicationContainer serverApps2 = server2.Install(nodes.Get (2));
+	serverApps2.Start (Seconds (1.0));
+  	serverApps2.Stop (Seconds (10.0));
+  	
 
-  	serverApps.Start (Seconds (1.0));
-  	serverApps.Stop (Seconds (10.0));
+	uint32_t client1MaxPacketSize = 1024;
+   	Time client1InterPacketInterval = Seconds (1.0);
+   	uint32_t client1maxPacketCount = 5;
 
-	uint32_t MaxPacketSize = 1024;
-   	Time interPacketInterval = Seconds (1.0);
-   	uint32_t maxPacketCount = 5;
- 	UdpClientHelper client (ifc12.GetAddress(1), port); //giving client address of the server
- 	client.SetAttribute ("MaxPackets", UintegerValue (maxPacketCount));
- 	client.SetAttribute ("Interval", TimeValue (interPacketInterval));
-  	client.SetAttribute ("PacketSize", UintegerValue (MaxPacketSize));
-  	ApplicationContainer clientApps = client.Install (nodes.Get (0));
-  	clientApps.Start (Seconds (2.0));
-  	clientApps.Stop (Seconds (10.0));
+	//giving client address of the server
+ 	UdpClientHelper client1(ifc12.GetAddress(1), serverPort1); 
+ 	client1.SetAttribute ("MaxPackets", UintegerValue (client1maxPacketCount));
+ 	client1.SetAttribute ("Interval", TimeValue (client1InterPacketInterval));
+  	client1.SetAttribute ("PacketSize", UintegerValue (client1MaxPacketSize));
+  	ApplicationContainer clientApps1 = client1.Install(nodes.Get (0));
+  	clientApps1.Start (Seconds (2.0));
+  	clientApps1.Stop (Seconds (10.0));
 
+	UdpClientHelper client2(ifc12.GetAddress(1), serverPort2); 
+ 	client1.SetAttribute ("MaxPackets", UintegerValue (client1maxPacketCount));
+ 	client1.SetAttribute ("Interval", TimeValue (client1InterPacketInterval));
+  	client1.SetAttribute ("PacketSize", UintegerValue (client1MaxPacketSize));
+  	ApplicationContainer clientApps2 = client2.Install(nodes.Get (0));
+  	clientApps2.Start (Seconds (2.0));
+  	clientApps2.Stop (Seconds (10.0));
+	
+	pointToPoint.EnablePcapAll("SPQ");
     //start and then destroy simulator
 	Simulator::Run();
 	Simulator::Destroy ();
