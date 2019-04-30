@@ -33,11 +33,12 @@ namespace ns3 {
 			Ptr<Packet> Remove();
 			virtual Ptr<Packet> Schedule(void) = 0;
 			uint32_t Classify(Ptr<Packet> p);
+			TrafficClass GetTrafficClassAtIndex(int index);
 
 		private:
 			QueueMode m_mode;
 			std::vector<TrafficClass*> q_class;
-			TrafficClass GetTrafficClassAtIndex(int index);
+
 			bool DoEnqueue(Ptr<Packet> p);
 			Ptr<Packet> DoDequeue(void);
 			virtual Ptr<const Packet> DoPeek(void) const = 0;

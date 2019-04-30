@@ -46,7 +46,50 @@ namespace ns3{
     }
 
     Ptr<Packet> DRR::Schedule() {
+    	std::vector<TrafficClass *> q_class = this->GetQ_Class();
+    	int q_size = static_cast<int>(q_class.size());
+    	TrafficClass tc = this->GetTrafficClassAtIndex(this->trafficIndex);
 
+    	Ptr<Packet> packet = tc.Peek();
+    	std::uint32_t packetSize = packet->GetSize();
+
+    	std::vector<std::uint32_t> creditVector = this->GetCredit();
+    	std::uint32_t & tcCurrentCredit = creditVector[this->trafficIndex];
+
+    	if(packetSize <= tcCurrentCredit){
+    		packet = tc.Dequeue();
+    		creditVector[this->trafficIndex] = tcCurrentCredit-packetSize;
+    		if(this->trafficIndex == q_size-1){
+    			double aggregatedWeight = 0;
+    			for(TrafficClass* trafficClass: q_class) {
+    				aggregatedWeight = aggregatedWeight + trafficClass->GetWeight();
+				}
+
+    			for(std::size_t i=0; i<creditVector.size(); ++i){
+    				creditVector[i] = creditVector[i] + (q_class[i]->GetWeight()/aggregatedWeight)*this->deficit;
+    			}
+    			this->trafficIndex = 0;
+    		}else{
+    			this->trafficIndex++;
+    		}
+    		return packet;
+    	}else{
+    		if(this->trafficIndex == q_size-1){
+    			double aggregatedWeight = 0;
+				for(TrafficClass* trafficClass: q_class) {
+					aggregatedWeight = aggregatedWeight + trafficClass->GetWeight();
+				}
+
+				for(std::size_t i=0; i<creditVector.size(); ++i){
+					creditVector[i] = creditVector[i] + (q_class[i]->GetWeight()/aggregatedWeight)*this->deficit;
+				}
+				return 0;
+			}else{
+				this->trafficIndex++;
+				packet = this->Schedule();
+				return packet;
+			}
+    	}
     }
 
     Ptr<Packet> DRR::ScheduleForPeek() {

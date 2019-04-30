@@ -33,6 +33,7 @@ namespace ns3{
 		private:
 			std::vector<std::uint32_t> credit;
 			std::uint32_t deficit;
+			int trafficIndex=0;
 			bool DoEnqueue(Ptr<Packet> packet);
 			Ptr<Packet> DoDequeue(void);
 			Ptr<const Packet> DoPeek(void);

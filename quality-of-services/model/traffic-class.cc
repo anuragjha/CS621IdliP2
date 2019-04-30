@@ -39,6 +39,10 @@ namespace ns3 {
         return m_queue.size();
     }
 
+    double TrafficClass::GetWeight(){
+		return this->weight;
+    }
+
     uint32_t TrafficClass::GetPriorityLevel() {
       return this->priority_level;
     }

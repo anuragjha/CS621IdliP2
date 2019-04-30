@@ -27,6 +27,7 @@ namespace ns3 {
 			Ptr<ns3::Packet> Dequeue(void);
 			Ptr<ns3::Packet> Peek(void);
 			uint32_t GetPriorityLevel(void);
+			double GetWeight(void);
 			uint32_t GetQueueSize(void);
 
 		private:
