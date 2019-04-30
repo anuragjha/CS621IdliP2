@@ -93,8 +93,26 @@ namespace ns3{
     }
 
     Ptr<Packet> DRR::ScheduleForPeek() {
-        Ptr<Packet> packet;
-        return packet;
+    	std::vector<TrafficClass *> q_class = this->GetQ_Class();
+		int q_size = static_cast<int>(q_class.size());
+		TrafficClass tc = this->GetTrafficClassAtIndex(this->trafficIndex);
+
+		Ptr<Packet> packet = tc.Peek();
+		std::uint32_t packetSize = packet->GetSize();
+
+		std::vector<std::uint32_t> creditVector = this->GetCredit();
+		std::uint32_t & tcCurrentCredit = creditVector[this->trafficIndex];
+		if(packetSize <= tcCurrentCredit){
+			return tc.Peek();
+		}else{
+			if(this->trafficIndex == q_size-1){
+				return 0;
+			}else{
+				this->trafficIndex++;
+				return this->ScheduleForPeek();
+			}
+
+		}
     }
 
     Ptr<Packet> DRR::DoDequeue() {
