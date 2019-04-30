@@ -28,21 +28,7 @@ namespace ns3 {
 
     // Push this to main method. Change constructor
     // Filter elements to filter at run time
-    Filter::Filter(Ipv4Address sourceIpAddress, uint16_t sourcePort, Ipv4Address destinationIpAddress, uint16_t destinationPort, uint8_t protocolNumber){
-    	FilterElement* sourceIpFilterElement = new SourceIpAddress(sourceIpAddress);
-    	this->AddFilterElement(sourceIpFilterElement);
-
-    	FilterElement* destinationIpFilterElement = new DestinationIpAddress(destinationIpAddress);
-    	this->AddFilterElement(destinationIpFilterElement);
-
-    	FilterElement* sourcePortFilterElement = new SourcePortNumber(sourcePort);
-		this->AddFilterElement(sourcePortFilterElement);
-
-		FilterElement* destinationPortFilterElement = new DestinationPortNumber(destinationPort);
-		this->AddFilterElement(destinationPortFilterElement);
-
-		FilterElement* protocolFilterElement = new ProtocolNumber(protocolNumber);
-		this->AddFilterElement(protocolFilterElement);
+    Filter::Filter(){
     }
 
     void Filter::PrintFilterElements() {

@@ -17,7 +17,7 @@ namespace ns3 {
 	class Filter:public Object{
 		public:
 			static TypeId GetTypeId (void);
-			Filter(Ipv4Address sourceIpAddress, uint16_t sourcePort, Ipv4Address destinationIpAddress, uint16_t destinationPort, uint8_t protocolNumber);
+			Filter();
 			void PrintFilterElements();
 			bool Match(Ptr<ns3::Packet> packet);
 			std::vector<ns3::FilterElement*> GetFilterElements();
