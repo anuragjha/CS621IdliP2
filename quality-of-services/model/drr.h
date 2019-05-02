@@ -19,10 +19,11 @@
 
 namespace ns3{
 
-    class DRR:public Diffserv{
+	template <typename Packet>
+    class DRR:public Diffserv<Packet>{
 		public:
 			static TypeId GetTypeId (void);
-			DRR();
+			DRR(QueueMode mode, std::vector<TrafficClass *);
 			~DRR();
 			Ptr<Packet> Schedule(void);
 			Ptr<Packet> ScheduleForPeek(void);
@@ -38,7 +39,15 @@ namespace ns3{
 			Ptr<Packet> DoDequeue(void);
 			Ptr<const Packet> DoPeek(void);
 			Ptr<Packet> DoRemove(void);
+			using Diffserv<Packet>::Enqueue;
+			using Diffserv<Packet>::Dequeue;
+			using Diffserv<Packet>::Remove;
+			using Diffserv<Packet>::Peek;
+
+			using Diffserv<Packet>::Schedule;
+			using Diffserv<Packet>::Classify;
     };
+	extern template class DRR<Packet>;
 }
 
 #endif //NS_3_ALLINONE_SPQ_H

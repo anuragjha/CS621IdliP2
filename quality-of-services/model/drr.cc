@@ -16,36 +16,51 @@ namespace ns3{
     NS_LOG_COMPONENT_DEFINE("DRR");
     NS_OBJECT_ENSURE_REGISTERED(DRR);
 
-    TypeId DRR::GetTypeId(void) {
-        static TypeId tid = TypeId("ns3::DRR")
-                .SetParent<Diffserv>()
-                .SetGroupName("TrafficControl");
+    template <typename Packet>
+    TypeId DRR<Packet>::GetTypeId(void) {
+        static TypeId tid =
+        		TypeId(("ns3::DRR<" + GetTypeParamName<DRR<Packet>> () + ">").c_str ())
+                .SetParent<Diffserv<Packet>>()
+                .SetGroupName("TrafficControl")
+				.template AddConstructor<DRR<Packet>>();
         return tid;
     }
 
-    DRR::DRR():Diffserv(){
+    template <typename Packet>
+    DRR<Packet>::DRR():Diffserv<Packet>(),NS_LOG_TEMPLATE_DEFINE ("DRR") {
+    }
+    template <typename Packet>
+	DRR<Packet>::DRR(ns3::QueueMode mode, std::vector<TrafficClass *> trafficClassVector): NS_LOG_TEMPLATE_DEFINE ("DRR") {
+		this->m_mode = mode;
+		this->q_class = trafficClassVector;
+		std::cout << "DRR.q_class.size: " << q_class.size () << std::endl;
+	}
+
+    template <typename Packet>
+    DRR<Packet>::~DRR() {
     }
 
-    DRR::~DRR() {
-    }
-
-    uint32_t DRR::GetDeficit(){
+    template <typename Packet>
+    uint32_t DRR<Packet>::GetDeficit(){
     	return this->deficit;
     }
-
-    void DRR::SetDeficit(uint32_t deficit){
+    template <typename Packet>
+    void DRR<Packet>::SetDeficit(uint32_t deficit){
     	this->deficit = deficit;
     }
 
-    std::vector<std::uint32_t> DRR::GetCredit(){
+    template <typename Packet>
+    std::vector<std::uint32_t> DRR<Packet>::GetCredit(){
     	return this->credit;
     }
 
-    void DRR::SetCredit(std::vector<std::uint32_t> credit){
+    template <typename Packet>
+    void DRR<Packet>::SetCredit(std::vector<std::uint32_t> credit){
     	this->credit = credit;
     }
 
-    Ptr<Packet> DRR::Schedule() {
+    template <typename Packet>
+    Ptr<Packet> DRR<Packet>::Schedule() {
     	std::vector<TrafficClass *> q_class = this->GetQ_Class();
     	int q_size = static_cast<int>(q_class.size());
     	TrafficClass tc = this->GetTrafficClassAtIndex(this->trafficIndex);
@@ -92,7 +107,8 @@ namespace ns3{
     	}
     }
 
-    Ptr<Packet> DRR::ScheduleForPeek() {
+    template <typename Packet>
+    Ptr<Packet> DRR<Packet>::ScheduleForPeek() {
     	std::vector<TrafficClass *> q_class = this->GetQ_Class();
 		int q_size = static_cast<int>(q_class.size());
 		TrafficClass tc = this->GetTrafficClassAtIndex(this->trafficIndex);
@@ -115,15 +131,18 @@ namespace ns3{
 		}
     }
 
-    Ptr<Packet> DRR::DoDequeue() {
+    template <typename Packet>
+    Ptr<Packet> DRR<Packet>::DoDequeue() {
       return this->Schedule();
     }
 
-    Ptr<const Packet> DRR::DoPeek() {
+    template <typename Packet>
+    Ptr<const Packet> DRR<Packet>::DoPeek() {
         return this->ScheduleForPeek();
     }
 
-    Ptr<Packet> DRR::DoRemove() {
+    template <typename Packet>
+    Ptr<Packet> DRR<Packet>::DoRemove() {
     	return this->DoDequeue();
 	}
 
