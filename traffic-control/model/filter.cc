@@ -35,9 +35,9 @@ namespace ns3 {
 
     bool Filter::Match(Ptr <ns3::Packet> packet) {
         for (FilterElement *filterElement:filterElements) {
-            if (filterElement->Match(packet)) {
+            if (!filterElement->Match(packet)) {
                 std::cout << "Match Found" << std::endl;
-                return true;
+                return false;
             }
             //  auto iter = filterElements.begin();
             //for(;iter!=filterElements.end();iter++){
@@ -53,6 +53,6 @@ namespace ns3 {
             //        return false;
             //    }
         }
-        return false;
+        return true;
     }
 }
