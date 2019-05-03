@@ -108,39 +108,27 @@ namespace ns3{
     template <typename Packet>
    Ptr<Packet> SPQ<Packet>::Schedule() {
        Ptr<Packet> p;
-      // uint32_t priority = 0;
-      // uint32_t index = -1;
-
-        std::cout<<" in Schedule : q_class[0].size: "<< q_class[0]->m_queue.size() <<std::endl;
-        std::cout<<" in Schedule : q_class[1].size: "<< q_class[1]->m_queue.size() <<std::endl;
-
-        std::cout<<" in Schedule : q_class[0] is EMPTY: "<< q_class[0]->IfEmpty () <<std::endl;
-        std::cout<<" in Schedule : q_class[1] is EMPTY: "<< q_class[1]->IfEmpty () <<std::endl;
-
-        if (q_class[0]->priority_level == 77 && q_class[0]->IfEmpty () != true) //HIGH PRIORITY
-        {
-            //std::cout<<"SPQ.priority_level is SAME!QUEUE is NOT EMPTY!priority:"<<  priority <<std::endl;
-            //p = q_class[0]-> Peek (); // Dequeue()
-            std::cout << "I am in High Priority !" << std::endl;
-            p = q_class[0] -> Dequeue();
-            std::cout<<"P is in 77 ----> "<< &p <<std::endl;
+       uint32_t priority = 99999;
+       uint32_t index = -1;
+        for(uint32_t i=0;i<q_class.size();i++) {
+            if(q_class[i]->IfEmpty() != true){
+                if (priority > q_class[i]->priority_level){
+                    std::cout << "I am in High Priority:"<<q_class[i]->priority_level<< std::endl;
+                    priority = q_class[i]->priority_level;
+                    index = i;
+                }
+            }
+        }
+        if(priority < 99999){
+           p = q_class[index]->Dequeue();
+           std::cout<<"Sheduling and returning a packet!!"<<std::endl;
             return p;
         }
-        else if ( q_class[0]->IfEmpty () == true)
-        {
+        std::cout<<"Returning Zero!!!!"<<std::endl;
+        return 0;
 
-            std::cout << "I am in LOW Priority !" << std::endl;
-            //p = q_class[1]-> Peek ();
-            p = q_class[1] -> Dequeue();
-            std::cout<<"P is in 99 ---->  "<< &p <<std::endl;
+        }
 
-            return p;
-        }
-        else {
-            std::cout << "PROBLEM!! Should not be here!" << std::endl;
-            return 0;
-        }
-   }
 
    template <typename Packet>
    bool SPQ<Packet>::AddTrafficClass(TrafficClass *trafficClass) {
