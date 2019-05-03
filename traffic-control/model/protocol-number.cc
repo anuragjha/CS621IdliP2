@@ -4,6 +4,8 @@
 #include "ns3/log.h"
 #include "ns3/ipv4-header.h"
 #include "protocol-number.h"
+#include "ns3/udp-header.h"
+#include "ns3/ppp-header.h"
 
 namespace ns3{
     NS_LOG_COMPONENT_DEFINE ("ProtocolNumber");
@@ -19,7 +21,7 @@ namespace ns3{
         return tid;
     }
 
-    ProtocolNumber::ProtocolNumber(uint32_t value):FilterElement() {
+    ProtocolNumber::ProtocolNumber(uint8_t value):FilterElement() {
         this->value = value;
     }
 
@@ -28,20 +30,23 @@ namespace ns3{
     }
 
     bool
-    ProtocolNumber::Match (Ptr<ns3::Packet> packet)
+    ProtocolNumber::Match (Ptr<ns3::Packet> p)
     {
         NS_LOG_FUNCTION (this);
-
+        Ptr<Packet> copyPacket = p -> Copy();
         Ipv4Header ipv4Header;
-        packet->PeekHeader(ipv4Header);
+        PppHeader pppHeader;
+
+        copyPacket -> RemoveHeader(pppHeader);
+        copyPacket -> RemoveHeader(ipv4Header);
 
         uint8_t protocolNumber = ipv4Header.GetProtocol();
 
         if(protocolNumber==value ){
-            std::cout<<" Matched protocolNumber:" << protocolNumber <<std::endl;
+           // std::cout<<" Matched protocolNumber:" << protocolNumber <<std::endl;
             return true;
         }  else{
-            std::cout<<" Not Matched protocolNumber:" << protocolNumber <<std::endl;
+            //std::cout<<" Not Matched protocolNumber:" << protocolNumber <<std::endl;
             return false;
         }
     }
