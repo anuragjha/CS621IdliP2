@@ -22,9 +22,15 @@ namespace ns3{
 			static TypeId GetTypeId (void);
 			DRR(QueueMode mode, std::vector<TrafficClass *>, std::uint32_t deficit);
 			virtual ~DRR();
+			bool Enqueue(Ptr<Packet> item);
+			Ptr<Packet> Dequeue(void);
+			Ptr<Packet> Remove(void);
+			Ptr<const Packet> Peek (void) const;
 			Ptr<Packet> Schedule(void);
 			Ptr<Packet> ScheduleForPeek(void);
+			uint32_t Classify (Ptr<Packet> item);
 			std::vector<TrafficClass*> q_class;
+			std::vector<TrafficClass*> GetQ_Class(void);
 			QueueMode m_mode;
 			uint32_t GetDeficit();
 			void SetDeficit(uint32_t deficit);
