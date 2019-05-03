@@ -52,6 +52,7 @@ class TrafficClass{
 
         uint32_t GetQueueSize(void);
 
+        double GetWeight(void);
 
         uint32_t GetPriorityLevel(void);
 
