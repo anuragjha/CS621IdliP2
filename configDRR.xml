@@ -1,26 +1,56 @@
 <?xml version="1.0"?>
 <traffic_list>
     <traffic>
-        <maxPackets value="1000"/>
+        <maxPackets value="2000"/>
         <maxBytes value="99"/>
         <weight value="2"/>
-        <priority_level value="77"/>
+        <priority_level value=""/>
         <isDefault value="0"/>
         <filters>
             <filter>
-                <!--<source_port value="49154"/>-->
-                <destination_port value="10"/>
+                <sourcePort value="49153"/>
+                <destinationPort value="9"/>
+                <sourceAddress value="10.1.1.1"/>
+                <destinationAddress value="10.1.2.2"/>
+                <protocolNumber value="17"/>
+                <sourceMask subnet="10.1.1.0" value="255.255.255.0"/>
+                <destinationMask subnet="10.1.2.0" value="255.255.255.0"/>
             </filter>
         </filters>
     </traffic>
     <traffic>
-        <maxPackets value="1000"/>
+        <maxPackets value="2000"/>
+        <maxBytes value="99"/>
+        <weight value="3"/>
+        <priority_level value="99"/>
+        <isDefault value="1"/>
+        <filters>
+        	<filter>
+                <sourcePort value="49154"/>
+                <destinationPort value="10"/>
+                <sourceAddress value="10.1.1.1"/>
+                <destinationAddress value="10.1.2.2"/>
+                <protocolNumber value="17"/>
+                <sourceMask subnet="10.1.1.0" value="255.255.255.0"/>
+                <destinationMask subnet="10.1.2.0" value="255.255.255.0"/>
+            </filter>
+        </filters>
+    </traffic>
+    <traffic>
+        <maxPackets value="2000"/>
         <maxBytes value="99"/>
         <weight value="3"/>
         <priority_level value="99"/>
         <isDefault value="1"/>
         <filters>
             <filter>
+                <sourcePort value="49155"/>
+                <destinationPort value="11"/>
+                <sourceAddress value="10.1.1.1"/>
+                <destinationAddress value="10.1.2.2"/>
+                <protocolNumber value="17"/>
+                <sourceMask subnet="10.1.1.0" value="255.255.255.0"/>
+                <destinationMask subnet="10.1.2.0" value="255.255.255.0"/>
             </filter>
         </filters>
     </traffic>

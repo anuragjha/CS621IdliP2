@@ -27,27 +27,27 @@ create_filter(xmlNode * node){
 
     for(cur_node=node->children; cur_node; cur_node=cur_node->next){
         if(cur_node->type==XML_ELEMENT_NODE){
-             if(strcmp((char*)cur_node->name,"source_address")==0){
+             if(strcmp((char*)cur_node->name,"sourceAddress")==0){
                  Ipv4Address address((char*)xmlGetProp(cur_node,(xmlChar *)"value"));
                  result->filterElements.push_back(new SourceIpAddress(address));
              }
-            // if(strcmp((char*)cur_node->name,"source_mask")==0){
+            // if(strcmp((char*)cur_node->name,"sourceMask")==0){
             //   Ipv4Mask mask((char*)xmlGetProp(cur_node,(xmlChar *)"value"));
             //   result->elements.push_back(new SourceMask(mask));
             // }
-            if(strcmp((char*)cur_node->name,"source_port")==0){
+            if(strcmp((char*)cur_node->name,"sourcePort")==0){
                 uint32_t port = atoi((char*)xmlGetProp(cur_node,(xmlChar *)"value"));
                 result->filterElements.push_back(new SourcePortNumber(port));
             }
-             if(strcmp((char*)cur_node->name,"destination_address")==0){
+             if(strcmp((char*)cur_node->name,"destinationAddress")==0){
                  Ipv4Address address((char*)xmlGetProp(cur_node,(xmlChar *)"value"));
                  result->filterElements.push_back(new DestinationIpAddress(address));
              }
-            // if(strcmp((char*)cur_node->name,"destination_mask")==0){
+            // if(strcmp((char*)cur_node->name,"destinationMask")==0){
             //   Ipv4Mask mask((char*)xmlGetProp(cur_node,(xmlChar *)"value"));
             //   result->elements.push_back(new DestinationMask(mask));
             // }
-            if(strcmp((char*)cur_node->name,"destination_port")==0){
+            if(strcmp((char*)cur_node->name,"destinationPort")==0){
                 uint32_t port = atoi((char*)xmlGetProp(cur_node,(xmlChar *)"value"));
                 result->filterElements.push_back(new DestinationPortNumber(port));
             }
@@ -227,12 +227,7 @@ main(int argc, char *argv[])
 	serverApps2.Start(Seconds (0.0));
 	serverApps2.Stop(Seconds (1000.0));
 
-    //uint32_t MaxPacketSize = 1024;
-    //	Time interPacketInterval = Seconds (0.01);
-    //uint32_t maxPacketCount = 5;
-
     //1st clientApps to start will take port - 49153 !!!
-    //2nd clientApps to start will take port - 49154 !!!
     UdpClientHelper client1 (ifc12.GetAddress(1), 9); //giving client address of the server
     client1.SetAttribute ("MaxPackets", UintegerValue (2000));
     client1.SetAttribute ("Interval", TimeValue (Seconds(0.01)));
@@ -241,7 +236,7 @@ main(int argc, char *argv[])
     clientApps1.Start (Seconds (10.001));
     clientApps1.Stop (Seconds (5000.0));
 
-
+    //2nd clientApps to start will take port - 49154 !!!
     UdpClientHelper client2 (ifc12.GetAddress (1), 10);
     client2.SetAttribute ("MaxPackets", UintegerValue (2000));
     client2.SetAttribute ("Interval", TimeValue (Seconds (0.01)));
@@ -250,13 +245,14 @@ main(int argc, char *argv[])
     clientApps2.Start (Seconds (10.000));
     clientApps2.Stop (Seconds (5000.0));
 
-    UdpClientHelper client2 (ifc12.GetAddress (1), 11);
-	client2.SetAttribute ("MaxPackets", UintegerValue (2000));
-	client2.SetAttribute ("Interval", TimeValue (Seconds (0.01)));
-	client2.SetAttribute ("PacketSize", UintegerValue (500));
-	ApplicationContainer clientApps2 = client2.Install (nodes.Gets(0));
-	clientApps2.Start (Seconds (10.000));
-	clientApps2.Stop (Seconds (5000.0));
+    //3rd clientApps to start will take port - 49155 !!!
+    UdpClientHelper client3 (ifc12.GetAddress (1), 11);
+	client3.SetAttribute ("MaxPackets", UintegerValue (2000));
+	client3.SetAttribute ("Interval", TimeValue (Seconds (0.01)));
+	client3.SetAttribute ("PacketSize", UintegerValue (500));
+	ApplicationContainer clientApps3 = client3.Install (nodes.Get(0));
+	clientApps3.Start (Seconds (10.000));
+	clientApps3.Stop (Seconds (5000.0));
 
 
     pointToPoint.EnablePcapAll("DRR");
