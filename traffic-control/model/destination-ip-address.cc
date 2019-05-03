@@ -1,4 +1,3 @@
-
 #include "ns3/log.h"
 #include "ns3/integer.h"
 #include "destination-ip-address.h"
@@ -52,7 +51,7 @@ namespace ns3 {
         copy->RemoveHeader(ppph);
         copy->RemoveHeader(iph);
 
-        Ipv4Address Ipv4Address = iph.GetSource();
+        Ipv4Address Ipv4Address = iph.GetDestination();
         if(Ipv4Address.IsEqual(this->value)){
             std::cout<<" Matched Ipv4Address:" << Ipv4Address <<std::endl;
             return true;
