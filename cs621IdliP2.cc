@@ -184,6 +184,7 @@ main(int argc, char *argv[])
 //    TODO: Should consider queue mode and create SPQ or DRR
     uint32_t deficit = 500;
     Ptr<DRR<Packet>> queue2 = new DRR<Packet>(QueueMode::QUEUE_MODE_BYTES,tcs, deficit);
+    queue2->SetCredit();
     sending_router->SetQueue(queue2);
 //    Ptr<SPQ<Packet>> queue2 = new SPQ<Packet>(QueueMode::QUEUE_MODE_PACKETS,tcs);
 //    sending_router->SetQueue(queue2);

@@ -3,7 +3,7 @@
     <traffic>
         <maxPackets value="1000"/>
         <maxBytes value="99"/>
-        <weight value="0"/>
+        <weight value="2"/>
         <priority_level value="77"/>
         <isDefault value="0"/>
         <filters>
@@ -16,7 +16,7 @@
     <traffic>
         <maxPackets value="1000"/>
         <maxBytes value="99"/>
-        <weight value="0"/>
+        <weight value="3"/>
         <priority_level value="99"/>
         <isDefault value="1"/>
         <filters>
