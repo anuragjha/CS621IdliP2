@@ -38,6 +38,7 @@ namespace ns3{
 		this->m_mode = mode;
 		this->q_class = trafficClassVector;
 		this->deficit = deficit;
+		this->SetCredit();
 		std::cout << "DRR.q_class.size: " << this->q_class.size () << std::endl;
 	}
 
@@ -60,8 +61,11 @@ namespace ns3{
     }
 
     template <typename Packet>
-    void DRR<Packet>::SetCredit(std::vector<std::uint32_t> credit){
-    	this->credit = credit;
+    void DRR<Packet>::SetCredit(){
+    	std::vector<TrafficClass *> q_class = this->GetQ_Class();
+    	for(std::size_t i=0; i<q_class.size(); ++i){
+			this->GetCredit()[i] = this->GetDeficit();
+		}
     }
 
     template <typename Packet>
@@ -137,23 +141,25 @@ namespace ns3{
     	std::vector<TrafficClass *> q_class = this->GetQ_Class();
     	int q_size = static_cast<int>(q_class.size());
     	std::cout<<"traffic class vector size" << q_size << std::endl;
-    	TrafficClass tc = this->GetTrafficClassAtIndex(this->trafficIndex);
-    	if(tc.IfEmpty()){
+    	TrafficClass * tc = q_class[this->trafficIndex];
+    	if(tc->IfEmpty()){
     		std::cout<<"traffic class is empty"<< std::endl;
     		this->trafficIndex++;
     		Ptr<Packet> packet = this->Schedule();
     		std::cout<<"Packet found"<< std::endl;
 			return packet;
     	}
-    	Ptr<Packet> packet = tc.Peek();
+    	std::cout<<"traffic class vector not empty"<<tc->GetQueueSize() << std::endl;
+    	Ptr<Packet> packet = tc->Peek();
     	std::uint32_t packetSize = packet->GetSize();
-
+    	std::cout<<"packet size" << packetSize<< std::endl;
     	std::vector<std::uint32_t> creditVector = this->GetCredit();
     	std::uint32_t & tcCurrentCredit = creditVector[this->trafficIndex];
+    	std::cout<<"traffic class current credit" << tcCurrentCredit<< std::endl;
 
     	if(packetSize <= tcCurrentCredit){
     		this->counter=0;
-    		packet = tc.Dequeue();
+    		packet = tc->Dequeue();
     		creditVector[this->trafficIndex] = tcCurrentCredit-packetSize;
     		if(this->trafficIndex == q_size-1){
     			this->UpdateCredit(creditVector);

@@ -35,8 +35,8 @@ namespace ns3{
 			uint32_t GetDeficit();
 			void SetDeficit(uint32_t deficit);
 			std::vector<std::uint32_t> GetCredit();
-			void SetCredit(std::vector<std::uint32_t> credit);
 		private:
+			void SetCredit();
 			std::vector<std::uint32_t> credit;
 			std::uint32_t deficit;
 			int trafficIndex=0;

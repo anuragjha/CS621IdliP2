@@ -80,6 +80,7 @@ namespace ns3{
       //      return false;
        // }
         bytes += packet->GetSize();
+        packets += packets;
         m_queue.push(packet);
         std::cout<<"Pushed the packet in the queue!! Returning true!";
         return true;
@@ -92,6 +93,7 @@ namespace ns3{
         Ptr<Packet> p = m_queue.front();
         m_queue.pop();
         bytes -= p->GetSize();
+        packets -= packets;
         return p;
     }
 
@@ -109,7 +111,7 @@ namespace ns3{
     }
 
     double TrafficClass::GetWeight() {
-	  return this->weight;
-	}
+    	return this->weight;
+    }
 }
 //classify in diffserv will call match
