@@ -83,7 +83,6 @@ create_from_xml(xmlNode * node){
                 weight = atoi((char*)xmlGetProp(cur_node,(xmlChar *)"value"));
             }
             if(strcmp((char*)cur_node->name,"priority_level")==0){
-
                 priority_level = atoi((char*)xmlGetProp(cur_node,(xmlChar *)"value"));
                 std::cout << "priority:" << priority_level;
             }
@@ -246,7 +245,7 @@ main(int argc, char *argv[])
     client2.SetAttribute ("Interval", TimeValue (Seconds (0.01)));
     client2.SetAttribute ("PacketSize", UintegerValue (1000));
     ApplicationContainer clientApps2 = client2.Install (nodes.Get (0));
-    clientApps2.Start (Seconds (15.000));
+    clientApps2.Start (Seconds (8000.000));
     clientApps2.Stop (Seconds (5000.0));
 
 
