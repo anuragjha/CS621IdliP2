@@ -54,7 +54,6 @@ class TrafficClass{
 
 
         uint32_t GetPriorityLevel(void);
-        double GetWeight(void);
 
         bool isDefault;
 

@@ -66,7 +66,6 @@ class Diffserv : public Queue<ns3::Packet>{
         bool DoEnqueue(Ptr<Packet> item);
         Ptr<Packet> DoDequeue(void);
         Ptr<const Packet> DoPeek(void) const;
-        Ptr<Packet> DoRemove(void);
 
         NS_LOG_TEMPLATE_DECLARE;
     };

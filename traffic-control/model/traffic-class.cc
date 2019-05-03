@@ -109,9 +109,5 @@ namespace ns3{
     uint32_t TrafficClass::GetPriorityLevel() {
       return this->priority_level;
     }
-
-    double TrafficClass::GetWeight() {
-    	return this->weight;
-    }
 }
 //classify in diffserv will call match

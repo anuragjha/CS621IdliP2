@@ -44,57 +44,51 @@ namespace ns3 {
 
     template <typename Packet>
     bool Diffserv<Packet>::DoEnqueue(Ptr <Packet> item) {
-        bool resultOfEnqueue = false;
-        uint32_t i = Classify(item);
-        TrafficClass tc = GetTrafficClassAtIndex(int(i));
-        resultOfEnqueue = tc.Enqueue(item);
-        return resultOfEnqueue;
+//        bool resultOfEnqueue = false;
+//        uint32_t i = Classify(item);
+//        TrafficClass tc = GetTrafficClassAtIndex(int(i));
+//        resultOfEnqueue = tc.Enqueue(item);
+//        return resultOfEnqueue;
+    return 1;
     }
 
-    //todo
+
     template <typename Packet>
     Ptr<Packet> Diffserv<Packet>::DoDequeue() {
-        for(TrafficClass *tc:q_class){
-            if(tc->Peek() != 0){
-                return tc->Dequeue();
-            }
-        }
+//        for(TrafficClass *tc:q_class){
+//            if(tc->Peek() != 0){
+//                return tc->Dequeue();
+//            }
+//        }
         return 0;
     }
 
-    //todo
+
     template <typename Packet>
     Ptr<const Packet> Diffserv<Packet>::DoPeek() const {
         Ptr<Packet> p = new Packet();
         return p;
     }
 
-    //todo
-    template <typename Packet>
-	Ptr<Packet> Diffserv<Packet>::DoRemove() {
-		Ptr<Packet> p = new Packet();
-		return p;
-	}
-
 
     template <typename Packet>
     bool Diffserv<Packet>::Enqueue(Ptr <Packet> item) {
-        return DoEnqueue(item);
+        return Enqueue(item);
     }
 
     template <typename Packet>
     Ptr<Packet> Diffserv<Packet>::Dequeue() {
-        return DoDequeue();
+        return Dequeue();
     }
 
     template <typename Packet>
     Ptr<Packet> Diffserv<Packet>::Remove() {
-        return DoRemove();
+        return Remove();
     }
 
     template <typename Packet>
     Ptr<const Packet> Diffserv<Packet>::Peek() const {
-        return DoPeek();
+        return Peek();
     }
 
 
@@ -120,7 +114,8 @@ namespace ns3 {
 
     template <typename Packet>
     TrafficClass Diffserv<Packet>::GetTrafficClassAtIndex(int index) {
-        TrafficClass* tc = this->q_class[index];
+        TrafficClass* tc;
+        tc = q_class[index];
         return *tc ;
     }
 

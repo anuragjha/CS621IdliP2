@@ -30,7 +30,7 @@ namespace ns3{
     bool
     ProtocolNumber::Match (Ptr<ns3::Packet> packet)
     {
-        NS_LOG_FUNCTION (this << packet);
+        NS_LOG_FUNCTION (this);
 
         Ipv4Header ipv4Header;
         packet->PeekHeader(ipv4Header);
@@ -46,4 +46,3 @@ namespace ns3{
         }
     }
 }
-

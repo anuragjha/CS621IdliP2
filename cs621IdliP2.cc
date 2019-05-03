@@ -11,7 +11,6 @@
 #include <libxml/tree.h>
 #include <libxml/parser.h>
 #include "ns3/spq.h"
-#include "ns3/drr.h"
 #include "ns3/source-port-number.h"
 #include "ns3/destination-port-number.h"
 
@@ -181,13 +180,8 @@ main(int argc, char *argv[])
 
     Ptr<PointToPointNetDevice> sending_router = DynamicCast<PointToPointNetDevice>(ndc12.Get(0));
 
-//    TODO: Should consider queue mode and create SPQ or DRR
-    uint32_t deficit = 500;
-    Ptr<DRR<Packet>> queue2 = new DRR<Packet>(QueueMode::QUEUE_MODE_BYTES,tcs, deficit);
-    queue2->SetCredit();
+    Ptr<SPQ<Packet>> queue2 = new SPQ<Packet>(QueueMode::QUEUE_MODE_PACKETS,tcs);
     sending_router->SetQueue(queue2);
-//    Ptr<SPQ<Packet>> queue2 = new SPQ<Packet>(QueueMode::QUEUE_MODE_PACKETS,tcs);
-//    sending_router->SetQueue(queue2);
 
     InternetStackHelper stack;
     stack.Install (nodes);

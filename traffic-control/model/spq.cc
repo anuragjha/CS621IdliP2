@@ -20,7 +20,8 @@ namespace ns3{
                 TypeId (("ns3::SPQ<" + GetTypeParamName<SPQ<Packet>> () + ">").c_str ())
                         .SetParent<Diffserv<Packet>> ()
                         .SetGroupName ("TrafficControl")
-                        .template AddConstructor<SPQ<Packet>> ();
+                        .template AddConstructor<SPQ<Packet>> () //)//TODO: I may need to add 2 parameters
+        ;
         return tid;
     }
 
@@ -74,7 +75,19 @@ namespace ns3{
         uint32_t index = -1;
 
         for(uint32_t i=0;i<q_class.size();i++){
+//            Ptr<Packet> copyPacket = item -> Copy();
+//            PppHeader pppHeader;
+//            Ipv4Header ipv4Header;
+//            UdpHeader udpHeader;
+//            copyPacket -> RemoveHeader(pppHeader);
+//            copyPacket -> RemoveHeader(ipv4Header);
+//            copyPacket -> RemoveHeader(udpHeader);
+//            uint32_t sourcePort = udpHeader.GetSourcePort();
+//            uint32_t destPort = udpHeader.GetDestinationPort();
+//            std::cout << "source Port number : " << sourcePort << "\n";
+
             if(q_class[i]->Match(item)){
+            //if (sourcePort == 49154 && destPort == 9) {
                 std::cout<<"Match found::"<<q_class[i]->priority_level<<std::endl;
                 std::cout<<"in Classify:: queue "<<i<<std::endl;
                 index = i;
@@ -93,7 +106,7 @@ namespace ns3{
     }
 
     template <typename Packet>
-    Ptr<Packet> SPQ<Packet>::Schedule() {
+   Ptr<Packet> SPQ<Packet>::Schedule() {
        Ptr<Packet> p;
       // uint32_t priority = 0;
       // uint32_t index = -1;
