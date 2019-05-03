@@ -233,20 +233,20 @@ main(int argc, char *argv[])
     //1st clientApps to start will take port - 49153 !!!
     //2nd clientApps to start will take port - 49154 !!!
     UdpClientHelper client1 (ifc12.GetAddress(1), 9); //giving client address of the server
-    client1.SetAttribute ("MaxPackets", UintegerValue (1000));
+    client1.SetAttribute ("MaxPackets", UintegerValue (5000));
     client1.SetAttribute ("Interval", TimeValue (Seconds(0.01)));
-    client1.SetAttribute ("PacketSize", UintegerValue (1024));
+    client1.SetAttribute ("PacketSize", UintegerValue (70));
     ApplicationContainer clientApps1 = client1.Install (nodes.Get (0));
-    clientApps1.Start (Seconds (10.000));
+    clientApps1.Start (Seconds (10.001));
     clientApps1.Stop (Seconds (5000.0));
 
 
     UdpClientHelper client2 (ifc12.GetAddress (1), 10);
-    client2.SetAttribute ("MaxPackets", UintegerValue (1000));
+    client2.SetAttribute ("MaxPackets", UintegerValue (5000));
     client2.SetAttribute ("Interval", TimeValue (Seconds (0.01)));
-    client2.SetAttribute ("PacketSize", UintegerValue (1000));
+    client2.SetAttribute ("PacketSize", UintegerValue (70));
     ApplicationContainer clientApps2 = client2.Install (nodes.Get (0));
-    clientApps2.Start (Seconds (8000.000));
+    clientApps2.Start (Seconds (10.000));
     clientApps2.Stop (Seconds (5000.0));
 
 

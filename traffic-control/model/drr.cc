@@ -79,10 +79,8 @@ namespace ns3{
 		for(TrafficClass* trafficClass: q_class) {
 			aggregatedWeight = aggregatedWeight + trafficClass->GetWeight();
 		}
-		std::cout<<aggregatedWeight<<std::endl;
 		for(std::size_t i=0; i<creditVector.size(); ++i){
 			creditVector[i] = creditVector[i] + (q_class[i]->GetWeight()/aggregatedWeight)*this->GetDeficit();
-			std::cout<<creditVector[i]<<std::endl;
 		}
 		this->credit = creditVector;
     }
@@ -123,10 +121,7 @@ namespace ns3{
 
 	template <typename Packet>
 	Ptr<Packet> DRR<Packet>::Dequeue() {
-		Ptr<Packet> p;
-		p = this->Schedule();
-		std::cout<<"Schedule p in Dequeue" << &p << std::endl;
-		return p;
+		return this->Schedule();
 	}
 
 	template <typename Packet>
@@ -142,41 +137,42 @@ namespace ns3{
 
     template <typename Packet>
     Ptr<Packet> DRR<Packet>::Schedule() {
-    	std::cout<<"Schedule called initated \n"<< std::endl;
+    	//std::cout<<"Schedule called initated"<< std::endl;
     	std::vector<TrafficClass *> q_class = this->GetQ_Class();
     	int q_size = static_cast<int>(q_class.size());
-    	std::cout<<"traffic class vector size" << q_size << std::endl;
+    	//std::cout<<"traffic class vector size" << q_size << std::endl;
     	TrafficClass * tc = q_class[this->trafficIndex];
     	if(tc->IfEmpty() && this->counter==q_size-1){
     		std::cout<<"All queues are empty"<<std::endl;
     		this->counter = 0;
     		return 0;
     	}else if(tc->IfEmpty()&&this->counter<q_size-1){
-    		std::cout<<"traffic class queue is empty. incrementing index from"<< this->trafficIndex << std::endl;
+    		//std::cout<<"traffic class queue is empty. incrementing index from"<< this->trafficIndex << std::endl;
     		this->trafficIndex++;
     		this->counter++;
     		Ptr<Packet> packet = this->Schedule();
-    		std::cout<<"Packet found. Packet Size: "<<packet->GetSize()<<std::endl;
+    		std::cout<<"Packet Scheduled. Packet Size: "<<packet->GetSize()<<" , Traffic Queue Weight: " << tc->GetWeight() <<std::endl;
 			return packet;
     	}else{
-			std::cout<<"traffic class queue is not empty. size of traffic class queue is : "<<tc->GetQueueSize() << std::endl;
+			//std::cout<<"traffic class queue is not empty. size of traffic class queue is : "<<tc->GetQueueSize() << std::endl;
 			Ptr<Packet> packet = tc->Peek();
 			std::uint32_t packetSize = packet->GetSize();
-			std::cout<<"packet size: " << packetSize<< std::endl;
+			//std::cout<<"packet size: " << packetSize<< std::endl;
 			std::vector<std::uint32_t> creditVector = this->GetCredit();
 
 			std::uint32_t & tcCurrentCredit = creditVector[this->trafficIndex];
-			std::cout<<"traffic class index "<< this->trafficIndex << "current credit:" << tcCurrentCredit<< std::endl;
+			//std::cout<<"traffic class index "<< this->trafficIndex << "current credit:" << tcCurrentCredit<< std::endl;
 
 			if(packetSize <= tcCurrentCredit){
-				std::cout<<"traffic class credit is greater than packet size" <<std::endl;
+				//std::cout<<"traffic class credit is greater than packet size" <<std::endl;
 				packet = tc->Dequeue();
 				creditVector[this->trafficIndex] = tcCurrentCredit-packetSize;
 				this->credit = creditVector;
 				this->counter=0;
+				std::cout<<"Packet Scheduled. Packet Size: "<<packet->GetSize()<<" , Traffic Queue Weight: " << tc->GetWeight()<<std::endl;
 				return packet;
 			}else{
-				std::cout<<"traffic class credit is less than packet size" <<std::endl;
+				//std::cout<<"traffic class credit is less than packet size" <<std::endl;
 				if(this->trafficIndex == q_size-1){
 					this->UpdateCredit(creditVector);
 					this->trafficIndex = 0;
