@@ -69,25 +69,32 @@ namespace ns3 {
         return p;
     }
 
+    //todo
+    template <typename Packet>
+	Ptr<Packet> Diffserv<Packet>::DoRemove() {
+		Ptr<Packet> p = new Packet();
+		return p;
+	}
+
 
     template <typename Packet>
     bool Diffserv<Packet>::Enqueue(Ptr <Packet> item) {
-        return Enqueue(item);
+        return DoEnqueue(item);
     }
 
     template <typename Packet>
     Ptr<Packet> Diffserv<Packet>::Dequeue() {
-        return Dequeue();
+        return DoDequeue();
     }
 
     template <typename Packet>
     Ptr<Packet> Diffserv<Packet>::Remove() {
-        return Remove();
+        return DoRemove();
     }
 
     template <typename Packet>
     Ptr<const Packet> Diffserv<Packet>::Peek() const {
-        return Peek();
+        return DoPeek();
     }
 
 
@@ -113,8 +120,7 @@ namespace ns3 {
 
     template <typename Packet>
     TrafficClass Diffserv<Packet>::GetTrafficClassAtIndex(int index) {
-        TrafficClass* tc;
-        tc = q_class[index];
+        TrafficClass* tc = this->q_class[index];
         return *tc ;
     }
 
