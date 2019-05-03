@@ -14,13 +14,13 @@ namespace ns3{
     public:
         static TypeId GetTypeID(void);
 
-        ProtocolNumber(uint32_t value);
+        ProtocolNumber(uint8_t value);
         ~ProtocolNumber();
 
         bool Match(Ptr<ns3::Packet> packet);
 
     private:
-        uint32_t value;
+        uint8_t value;
     };
 }
 #endif //NS_3_ALLINONE_PROTOCOL_NUMBER_H
