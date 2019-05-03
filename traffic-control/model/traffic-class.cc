@@ -54,7 +54,6 @@ namespace ns3{
 
         std::cout<<"Number of filters matched:"<<i<<std::endl;
         std::cout<<"static_cast<int>(filters.size()):"<<static_cast<int>(filters.size())<<std::endl;
-      //  if(i== static_cast<int>(filters.size())){
         if(i>0){
             return true;
         }
@@ -67,18 +66,6 @@ namespace ns3{
     }
 
     bool TrafficClass::Enqueue(Ptr <Packet> packet) {
-       // if(m_queue.size() >= maxPackets){
-
-       //     std::cout<<"TrafficClass Enqueue Error 1 !!!!!!!:"<<std::endl;
-            // Drop(packet);
-       //     return false;
-        //}
-       // if(bytes + packet->GetSize() >= maxBytes){
-       //     std::cout<<"Bytes already in the queue:"<<bytes<<std::endl;
-      //      std::cout<<"TrafficClass Enqueue Error 2 !!!!!!!"<<std::endl;
-            //Drop(packet);
-      //      return false;
-       // }
         bytes += packet->GetSize();
         packets += packets;
         m_queue.push(packet);

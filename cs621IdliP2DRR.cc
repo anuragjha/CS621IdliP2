@@ -181,7 +181,6 @@ main(int argc, char *argv[])
 
     Ptr<PointToPointNetDevice> sending_router = DynamicCast<PointToPointNetDevice>(ndc12.Get(0));
 
-//    TODO: Should consider queue mode and create SPQ or DRR
     uint32_t deficit = 500;
     Ptr<DRR<Packet>> queue2 = new DRR<Packet>(QueueMode::QUEUE_MODE_BYTES,tcs, deficit);
     queue2->SetCredit();
@@ -212,9 +211,8 @@ main(int argc, char *argv[])
     //
     // Create one udpServer applications on node one.
     //
-    //uint16_t port = 9;
     UdpServerHelper server1 (9);
-    ApplicationContainer serverApps1 = server1.Install (nodes.Get (2));
+    ApplicationContainer serverApps1 = server1.Install(nodes.Get(2));
     serverApps1.Start (Seconds (0.0));
     serverApps1.Stop (Seconds (1000.0));
 
@@ -224,6 +222,11 @@ main(int argc, char *argv[])
     serverApps2.Start(Seconds (0.0));
     serverApps2.Stop(Seconds (1000.0));
 
+    UdpServerHelper server3 (11);
+	ApplicationContainer serverApps3 = server3.Install(nodes.Get(2));
+	serverApps2.Start(Seconds (0.0));
+	serverApps2.Stop(Seconds (1000.0));
+
     //uint32_t MaxPacketSize = 1024;
     //	Time interPacketInterval = Seconds (0.01);
     //uint32_t maxPacketCount = 5;
@@ -231,21 +234,29 @@ main(int argc, char *argv[])
     //1st clientApps to start will take port - 49153 !!!
     //2nd clientApps to start will take port - 49154 !!!
     UdpClientHelper client1 (ifc12.GetAddress(1), 9); //giving client address of the server
-    client1.SetAttribute ("MaxPackets", UintegerValue (5000));
+    client1.SetAttribute ("MaxPackets", UintegerValue (2000));
     client1.SetAttribute ("Interval", TimeValue (Seconds(0.01)));
-    client1.SetAttribute ("PacketSize", UintegerValue (70));
-    ApplicationContainer clientApps1 = client1.Install (nodes.Get (0));
+    client1.SetAttribute ("PacketSize", UintegerValue (500));
+    ApplicationContainer clientApps1 = client1.Install (nodes.Get(0));
     clientApps1.Start (Seconds (10.001));
     clientApps1.Stop (Seconds (5000.0));
 
 
     UdpClientHelper client2 (ifc12.GetAddress (1), 10);
-    client2.SetAttribute ("MaxPackets", UintegerValue (5000));
+    client2.SetAttribute ("MaxPackets", UintegerValue (2000));
     client2.SetAttribute ("Interval", TimeValue (Seconds (0.01)));
-    client2.SetAttribute ("PacketSize", UintegerValue (70));
-    ApplicationContainer clientApps2 = client2.Install (nodes.Get (0));
+    client2.SetAttribute ("PacketSize", UintegerValue (500));
+    ApplicationContainer clientApps2 = client2.Install (nodes.Get(0));
     clientApps2.Start (Seconds (10.000));
     clientApps2.Stop (Seconds (5000.0));
+
+    UdpClientHelper client2 (ifc12.GetAddress (1), 11);
+	client2.SetAttribute ("MaxPackets", UintegerValue (2000));
+	client2.SetAttribute ("Interval", TimeValue (Seconds (0.01)));
+	client2.SetAttribute ("PacketSize", UintegerValue (500));
+	ApplicationContainer clientApps2 = client2.Install (nodes.Gets(0));
+	clientApps2.Start (Seconds (10.000));
+	clientApps2.Stop (Seconds (5000.0));
 
 
     pointToPoint.EnablePcapAll("DRR");
