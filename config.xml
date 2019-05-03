@@ -10,11 +10,11 @@
             <filter>
                 <source_address value="10.1.1.1"/>
                 <source_port value="49154"/>
-                <!--<source_mask value="" >-->
-                <!--<destination_address value = "10.1.2.2"/>-->
+                <source_mask value="255.255.255.0"/>
+                <destination_address value = "10.1.2.2"/>
                 <destination_port value="10"/>
-                <!--<destination_mask value="">-->
-               <!-- <protocol value="17"/>-->
+                <destination_mask value="255.255.255.0"/>
+               <protocol value="17"/>
             </filter>
         </filters>
     </traffic>
@@ -26,13 +26,13 @@
         <isDefault value="1"/>
         <filters>
             <filter>
-                <!--<source_address value="10.1.1.1"/>-->
-                <!--<source_port value="49153"/>-->
-                <!--<source_mask value="" >-->
-                <!--<destination_address value = "10.1.2.2"/>-->
-                <!--<destination_port value="9"/>-->
-                <!--<destination_mask value="">-->
-                <!--<protocol value="17"/>-->
+                <source_address value="10.1.1.1"/>
+                <source_port value="49153"/>
+                <source_mask value="255.255.255.0" />
+                <destination_address value = "10.1.2.2"/>
+                <destination_port value="9"/>
+                <destination_mask value="255.255.255.0"/>
+                <protocol value="17"/>
             </filter>
         </filters>
     </traffic>
